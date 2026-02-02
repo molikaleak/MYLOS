@@ -1,0 +1,81 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Environment Configuration Files ###
+.env
+.env.*
+!.env.example
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.test
+
+### Application Configuration ###
+application-local.properties
+application-dev.properties
+application-staging.properties
+application-prod.properties
+application-test.properties
+
+### Secrets and Credentials ###
+*.key
+*.pem
+*.crt
+*.cert
+*.jks
+secrets/
+credentials/
+config/keystore/
+
+### Logs ###
+logs/
+*.log
+log/
+*.log.*
+
+### Temporary Files ###
+*.tmp
+*.temp
+tmp/
+temp/
+
+### IDE Specific ###
+*.swp
+*.swo
+*~
+.idea/
+*.iml
+*.ipr
+*.iws
