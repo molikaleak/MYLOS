@@ -73,39 +73,94 @@ The application will be available at `http://localhost:8080`
 
 ## CI/CD Integration
 
+The project now includes a GitHub Actions workflow located at `.github/workflows/ci.yml`. This workflow automates building, testing, and Docker image publishing.
+
+### Workflow Overview
+
+The pipeline consists of two jobs:
+
+1. **build-and-test**: Runs on every push and pull request to the `main` branch. It compiles the code, runs unit tests, and packages the application.
+2. **docker-build-push**: Runs only on pushes to `main` (not on pull requests). It logs into Docker Hub and builds/pushes the Docker image using Jib.
+
+### Setting Up Secrets
+
+For the Docker push to work, you need to set the following secrets in your GitHub repository:
+
+1. `DOCKER_HUB_USERNAME`: Your Docker Hub username (e.g., `molikaa`)
+2. `DOCKER_HUB_TOKEN`: A Docker Hub personal access token (with write permissions)
+
+To add secrets:
+- Go to your GitHub repository → Settings → Secrets and variables → Actions → New repository secret.
+
 ### GitHub Actions Example
 
-Create `.github/workflows/docker-publish.yml`:
+The generated workflow file (`.github/workflows/ci.yml`) looks like this:
 
 ```yaml
-name: Build and Push Docker Image
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up JDK 21
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-      - name: Build and Push with Jib
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn clean compile -DskipTests
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Package application
+        run: mvn package -DskipTests
+
+  docker-build-push:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build and push Docker image with Jib
         run: |
           mvn compile jib:build \
-            -Ddocker.image.prefix=$DOCKER_USERNAME \
-            -Djib.to.auth.username=$DOCKER_USERNAME \
-            -Djib.to.auth.password=$DOCKER_PASSWORD
+            -Ddocker.image.prefix=${{ secrets.DOCKER_HUB_USERNAME }} \
+            -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }} \
+            -Djib.to.auth.password=${{ secrets.DOCKER_HUB_TOKEN }}
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_TOKEN }}
 ```
+
+### Manual Trigger
+
+You can also manually trigger the workflow from the GitHub Actions tab.
 
 ### Environment Variables for Authentication
 

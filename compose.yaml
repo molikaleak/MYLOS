@@ -6,9 +6,9 @@ services:
     container_name: postgres-los
     platform: linux/arm64
     environment:
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME:-los_db}
+      POSTGRES_USER: ${DATABASE_USERNAME:-los_user}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-los_password}
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5433:5432"
