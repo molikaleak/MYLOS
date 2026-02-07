@@ -33,8 +33,8 @@ public interface LoanApplicationRepository extends JpaRepository<TLoanApplicatio
     long countByBranchIdAndStatusCode(@Param("branchId") Long branchId, 
                                      @Param("statusCode") String statusCode);
     
-    @Query("SELECT la FROM TLoanApplication la WHERE la.appliedAmount BETWEEN :minAmount AND :maxAmount")
-    List<TLoanApplication> findByAppliedAmountBetween(@Param("minAmount") Double minAmount, 
+    @Query("SELECT la FROM TLoanApplication la WHERE la.loanAmount BETWEEN :minAmount AND :maxAmount")
+    List<TLoanApplication> findByAppliedAmountBetween(@Param("minAmount") Double minAmount,
                                                      @Param("maxAmount") Double maxAmount);
     
     @Query("SELECT la FROM TLoanApplication la WHERE la.createdAt >= :startDate AND la.createdAt <= :endDate")
@@ -44,7 +44,7 @@ public interface LoanApplicationRepository extends JpaRepository<TLoanApplicatio
     @Query("SELECT la FROM TLoanApplication la WHERE la.customerId = :customerId ORDER BY la.createdAt DESC")
     List<TLoanApplication> findLatestByCustomerId(@Param("customerId") Long customerId);
     
-    @Query("SELECT SUM(la.appliedAmount) FROM TLoanApplication la WHERE la.branchId = :branchId AND la.statusCode = 'APPROVED'")
+    @Query("SELECT SUM(la.loanAmount) FROM TLoanApplication la WHERE la.branchId = :branchId AND la.statusCode = 'APPROVED'")
     Optional<Double> sumApprovedAmountByBranch(@Param("branchId") Long branchId);
     
     @Query("SELECT COUNT(la) FROM TLoanApplication la WHERE la.statusCode = :statusCode AND la.createdAt >= :startDate")

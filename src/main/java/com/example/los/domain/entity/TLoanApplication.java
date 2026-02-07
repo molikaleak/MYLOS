@@ -1,11 +1,16 @@
 package com.example.los.domain.entity;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.Instant;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -25,6 +30,9 @@ public class TLoanApplication {
 
     @Column(name = "product_id")
     private Long productId;
+
+    @Column(name = "branch_id")
+    private Long branchId;
 
     @Column(name = "loan_amount", precision = 18, scale = 2)
     private BigDecimal loanAmount;

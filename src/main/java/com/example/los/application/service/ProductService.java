@@ -105,12 +105,12 @@ public class ProductService {
     private ProductResponse mapToResponse(MProduct product) {
         return ProductResponse.builder()
                 .id(product.getId())
-                .code(product.getCode())
-                .name(product.getName())
+                .code(product.getProductCode())
+                .name(product.getProductNameEn())
                 .minAmount(product.getMinAmount())
                 .maxAmount(product.getMaxAmount())
                 .tenureMonth(product.getTenureMonth())
-                .statusCode(product.getStatusCode())
+                .statusCode(product.getStatus())
                 .build();
     }
 }

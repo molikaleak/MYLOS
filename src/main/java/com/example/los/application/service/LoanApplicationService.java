@@ -43,8 +43,8 @@ public class LoanApplicationService {
         MProduct product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with ID: " + request.getProductId()));
         
-        if (!"ACTIVE".equals(product.getStatusCode())) {
-            throw new IllegalArgumentException("Product is not active: " + product.getCode());
+        if (!"ACTIVE".equals(product.getStatus())) {
+            throw new IllegalArgumentException("Product is not active: " + product.getProductCode());
         }
         
         // Validate loan amount is within product limits

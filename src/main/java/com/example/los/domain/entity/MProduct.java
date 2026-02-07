@@ -1,10 +1,15 @@
 package com.example.los.domain.entity;
 
-import jakarta.persistence.*;
+import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -17,10 +22,19 @@ public class MProduct {
     private Long id;
 
     @Column(name = "code", length = 50)
-    private String code;
+    private String productCode;
 
     @Column(name = "name")
-    private String name;
+    private String productNameEn;
+
+    @Column(name = "name_kh")
+    private String productNameKh;
+
+    @Column(name = "product_type", length = 50)
+    private String productType;
+
+    @Column(name = "interest_rate", precision = 8, scale = 4)
+    private BigDecimal interestRate;
 
     @Column(name = "min_amount", precision = 18, scale = 2)
     private BigDecimal minAmount;
@@ -32,6 +46,9 @@ public class MProduct {
     private Integer tenureMonth;
 
     @Column(name = "status_code", length = 50)
-    private String statusCode;
+    private String status;
+
+    @Column(name = "created_at")
+    private java.time.Instant createdAt;
 
 }

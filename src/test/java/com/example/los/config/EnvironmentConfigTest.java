@@ -15,7 +15,7 @@ import com.example.los.infrastructure.config.JwtProperties;
  * and used in the application configuration.
  */
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 class EnvironmentConfigTest {
 
     @Autowired
@@ -28,27 +28,30 @@ class EnvironmentConfigTest {
         assertThat(jwtProperties.getIssuer()).isEqualTo("loan-origination-local");
         assertThat(jwtProperties.getAudience()).isEqualTo("loan-origination-local-client");
         
-        // Verify secret key is loaded from environment (not default)
+        // Verify secret key is loaded from test configuration
         assertThat(jwtProperties.getSecretKey())
             .isNotBlank()
-            .isNotEqualTo("your-256-bit-secret-key-change-this-in-production");
+            .contains("test-local-secret-key");
         
         // Verify production safety check
-        assertThat(jwtProperties.isProductionReady()).isFalse(); // Should be false for local/test
+        assertThat(jwtProperties.isProductionReady()).isFalse(); // Should be false for test
     }
 
     @Test
     void testDotenvConfigUtilityMethods() {
         // Test environment variable retrieval with fallback
         String dbUrl = DotenvConfig.getEnv("DATABASE_URL", "default-url");
-        assertThat(dbUrl).isEqualTo("jdbc:postgresql://localhost:5432/loan_db_local");
+        assertThat(dbUrl).isEqualTo("jdbc:h2:mem:testdb");
         
         String nonExistent = DotenvConfig.getEnv("NON_EXISTENT_VAR", "default-value");
         assertThat(nonExistent).isEqualTo("default-value");
         
-        // Test environment detection
-        assertThat(DotenvConfig.isDevelopment()).isTrue();
+        // Test environment detection - test environment should not be development or production
+        assertThat(DotenvConfig.isDevelopment()).isFalse();
         assertThat(DotenvConfig.isProduction()).isFalse();
+        // Verify APP_ENVIRONMENT is "test"
+        String appEnv = DotenvConfig.getEnv("APP_ENVIRONMENT", "unknown");
+        assertThat(appEnv).isEqualTo("test");
     }
 
     @Test
@@ -58,22 +61,22 @@ class EnvironmentConfigTest {
         // 2. .env file values
         // 3. application.properties defaults (lowest)
         
-        // The JWT secret should come from .env.local file
+        // The JWT secret should come from .env.test file
         String secretKey = jwtProperties.getSecretKey();
         assertThat(secretKey).contains("test-local-secret-key");
         
-        // Server port should come from .env.local (8081, not 8080)
+        // Server port should come from .env.test (8081, not 8080)
         // Note: We can't directly test server.port here without Spring context
         // but the configuration is loaded via environment variables
     }
 
     @Test
     void testEnvironmentSpecificConfiguration() {
-        // Verify that we're using the local profile
+        // Verify that we're using the test profile
         String appEnvironment = DotenvConfig.getEnv("APP_ENVIRONMENT", "unknown");
-        assertThat(appEnvironment).isEqualTo("local");
+        assertThat(appEnvironment).isEqualTo("test");
         
-        // Verify debug mode is enabled for local
+        // Verify debug mode is enabled for test
         String appDebug = DotenvConfig.getEnv("APP_DEBUG", "false");
         assertThat(appDebug).isEqualTo("true");
     }
