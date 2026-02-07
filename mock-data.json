@@ -1,0 +1,373 @@
+{
+  "authentication": {
+    "register": {
+      "admin": {
+        "username": "admin",
+        "email": "admin@bank.com",
+        "phone": "+85512345678",
+        "password": "admin123",
+        "branchId": 1,
+        "roleCode": "ADMIN"
+      },
+      "officer": {
+        "username": "officer.john",
+        "email": "john.officer@bank.com",
+        "phone": "+85587654321",
+        "password": "officer123",
+        "branchId": 1,
+        "roleCode": "OFFICER"
+      },
+      "manager": {
+        "username": "manager.jane",
+        "email": "jane.manager@bank.com",
+        "phone": "+85599887766",
+        "password": "manager123",
+        "branchId": 1,
+        "roleCode": "MANAGER"
+      }
+    },
+    "login": {
+      "admin": {
+        "usernameOrEmail": "admin",
+        "password": "admin123"
+      },
+      "officer": {
+        "usernameOrEmail": "officer.john",
+        "password": "officer123"
+      }
+    },
+    "refreshToken": {
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwNTM0NTYwMCwiZXhwIjoxNzA1NDMyMDAwfQ.example-refresh-token"
+    }
+  },
+  "customers": [
+    {
+      "id": 1,
+      "nameEn": "John Doe",
+      "nameKh": "ចន ដូ",
+      "phone": "+85512345678",
+      "addressId": 1,
+      "email": "john.doe@example.com",
+      "idNumber": "123456789",
+      "idType": "PASSPORT",
+      "dateOfBirth": "1990-05-15",
+      "gender": "MALE",
+      "occupation": "Software Engineer",
+      "monthlyIncome": 2500.00,
+      "maritalStatus": "MARRIED",
+      "nationality": "Cambodian",
+      "createdAt": "2024-01-15T08:30:00Z",
+      "updatedAt": "2024-01-15T08:30:00Z",
+      "totalLoanApplications": 2,
+      "activeLoans": 1,
+      "totalLoanAmount": 15000.00
+    },
+    {
+      "id": 2,
+      "nameEn": "Jane Smith",
+      "nameKh": "ជេន ស្មីត",
+      "phone": "+85598765432",
+      "addressId": 2,
+      "email": "jane.smith@example.com",
+      "idNumber": "987654321",
+      "idType": "NATIONAL_ID",
+      "dateOfBirth": "1985-08-22",
+      "gender": "FEMALE",
+      "occupation": "Business Owner",
+      "monthlyIncome": 5000.00,
+      "maritalStatus": "SINGLE",
+      "nationality": "Cambodian",
+      "createdAt": "2024-01-16T09:15:00Z",
+      "updatedAt": "2024-01-16T09:15:00Z",
+      "totalLoanApplications": 1,
+      "activeLoans": 1,
+      "totalLoanAmount": 25000.00
+    },
+    {
+      "id": 3,
+      "nameEn": "David Chen",
+      "nameKh": "ដេវីដ ឆេន",
+      "phone": "+85511223344",
+      "addressId": 3,
+      "email": "david.chen@example.com",
+      "idNumber": "456789123",
+      "idType": "PASSPORT",
+      "dateOfBirth": "1978-11-30",
+      "gender": "MALE",
+      "occupation": "Teacher",
+      "monthlyIncome": 1200.00,
+      "maritalStatus": "MARRIED",
+      "nationality": "Chinese",
+      "createdAt": "2024-01-17T10:45:00Z",
+      "updatedAt": "2024-01-17T10:45:00Z",
+      "totalLoanApplications": 1,
+      "activeLoans": 0,
+      "totalLoanAmount": 3000.00
+    }
+  ],
+  "customerRequests": [
+    {
+      "nameEn": "Sopha Kim",
+      "nameKh": "សុផា គីម",
+      "phone": "+85555667788",
+      "addressId": 4,
+      "email": "sopha.kim@example.com",
+      "idNumber": "789123456",
+      "idType": "NATIONAL_ID",
+      "dateOfBirth": "1992-03-10",
+      "gender": "FEMALE",
+      "occupation": "Nurse",
+      "monthlyIncome": 1800.00,
+      "maritalStatus": "SINGLE",
+      "nationality": "Cambodian"
+    },
+    {
+      "nameEn": "Michael Brown",
+      "nameKh": "ម៉ាយគល ប្រោន",
+      "phone": "+85566778899",
+      "addressId": 5,
+      "email": "michael.brown@example.com",
+      "idNumber": "321654987",
+      "idType": "PASSPORT",
+      "dateOfBirth": "1982-07-25",
+      "gender": "MALE",
+      "occupation": "Accountant",
+      "monthlyIncome": 2200.00,
+      "maritalStatus": "MARRIED",
+      "nationality": "American"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "code": "PL-001",
+      "name": "Personal Loan Basic",
+      "description": "Basic personal loan for general purposes",
+      "minAmount": 1000.00,
+      "maxAmount": 5000.00,
+      "tenureMonth": 12,
+      "interestRate": 12.5,
+      "productType": "PERSONAL_LOAN",
+      "statusCode": "ACTIVE",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdBy": "admin",
+      "updatedBy": "admin"
+    },
+    {
+      "id": 2,
+      "code": "HL-001",
+      "name": "Home Loan Standard",
+      "description": "Standard home loan for property purchase",
+      "minAmount": 10000.00,
+      "maxAmount": 100000.00,
+      "tenureMonth": 240,
+      "interestRate": 8.5,
+      "productType": "HOME_LOAN",
+      "statusCode": "ACTIVE",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdBy": "admin",
+      "updatedBy": "admin"
+    },
+    {
+      "id": 3,
+      "code": "BL-001",
+      "name": "Business Loan Pro",
+      "description": "Business loan for small and medium enterprises",
+      "minAmount": 5000.00,
+      "maxAmount": 50000.00,
+      "tenureMonth": 60,
+      "interestRate": 10.5,
+      "productType": "BUSINESS_LOAN",
+      "statusCode": "ACTIVE",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdBy": "admin",
+      "updatedBy": "admin"
+    },
+    {
+      "id": 4,
+      "code": "EL-001",
+      "name": "Education Loan",
+      "description": "Loan for education expenses",
+      "minAmount": 500.00,
+      "maxAmount": 10000.00,
+      "tenureMonth": 48,
+      "interestRate": 7.5,
+      "productType": "EDUCATION_LOAN",
+      "statusCode": "ACTIVE",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdBy": "admin",
+      "updatedBy": "admin"
+    }
+  ],
+  "loanApplications": [
+    {
+      "id": 1,
+      "customerId": 1,
+      "productId": 2,
+      "branchId": 1,
+      "applicationNumber": "LA-2024-001",
+      "appliedAmount": 10000.00,
+      "approvedAmount": 9500.00,
+      "loanTermMonths": 24,
+      "purpose": "Home Renovation",
+      "collateralDescription": "Land title deed No. 12345",
+      "collateralValue": 20000.00,
+      "statusCode": "APPROVED",
+      "statusDescription": "Application approved by manager",
+      "remarks": "Approved with reduced amount",
+      "repaymentFrequency": "MONTHLY",
+      "currencyCode": "USD",
+      "createdAt": "2024-01-15T09:00:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z",
+      "createdBy": "officer.john",
+      "updatedBy": "manager.jane"
+    },
+    {
+      "id": 2,
+      "customerId": 2,
+      "productId": 3,
+      "branchId": 1,
+      "applicationNumber": "LA-2024-002",
+      "appliedAmount": 25000.00,
+      "approvedAmount": null,
+      "loanTermMonths": 60,
+      "purpose": "Business Expansion",
+      "collateralDescription": "Commercial property in Phnom Penh",
+      "collateralValue": 50000.00,
+      "statusCode": "UNDER_REVIEW",
+      "statusDescription": "Application under review",
+      "remarks": "Additional documents requested",
+      "repaymentFrequency": "QUARTERLY",
+      "currencyCode": "USD",
+      "createdAt": "2024-01-16T11:20:00Z",
+      "updatedAt": "2024-01-16T11:20:00Z",
+      "createdBy": "officer.john",
+      "updatedBy": "officer.john"
+    },
+    {
+      "id": 3,
+      "customerId": 3,
+      "productId": 1,
+      "branchId": 1,
+      "applicationNumber": "LA-2024-003",
+      "appliedAmount": 3000.00,
+      "approvedAmount": null,
+      "loanTermMonths": 12,
+      "purpose": "Medical Expenses",
+      "collateralDescription": "Vehicle registration No. PP-1234",
+      "collateralValue": 8000.00,
+      "statusCode": "REJECTED",
+      "statusDescription": "Application rejected - insufficient income",
+      "remarks": "Monthly income too low for requested amount",
+      "repaymentFrequency": "MONTHLY",
+      "currencyCode": "USD",
+      "createdAt": "2024-01-17T14:45:00Z",
+      "updatedAt": "2024-01-18T09:15:00Z",
+      "createdBy": "officer.john",
+      "updatedBy": "manager.jane"
+    }
+  ],
+  "loanApplicationRequests": [
+    {
+      "customerId": 1,
+      "productId": 4,
+      "branchId": 1,
+      "appliedAmount": 5000.00,
+      "loanTermMonths": 48,
+      "purpose": "Master's Degree Tuition",
+      "collateralDescription": "University acceptance letter",
+      "collateralValue": 0.00,
+      "remarks": "For overseas education",
+      "repaymentFrequency": "MONTHLY",
+      "currencyCode": "USD"
+    },
+    {
+      "customerId": 2,
+      "productId": 2,
+      "branchId": 1,
+      "appliedAmount": 50000.00,
+      "loanTermMonths": 180,
+      "purpose": "House Construction",
+      "collateralDescription": "Land title in Siem Reap",
+      "collateralValue": 75000.00,
+      "remarks": "New house construction project",
+      "repaymentFrequency": "MONTHLY",
+      "currencyCode": "USD"
+    }
+  ],
+  "statusCodes": {
+    "loanApplication": [
+      "DRAFT",
+      "SUBMITTED",
+      "UNDER_REVIEW",
+      "APPROVED",
+      "REJECTED",
+      "DISBURSED",
+      "CLOSED"
+    ],
+    "product": [
+      "ACTIVE",
+      "INACTIVE",
+      "SUSPENDED"
+    ]
+  },
+  "testScenarios": {
+    "happyPath": {
+      "description": "Complete loan application flow",
+      "steps": [
+        "1. Login as officer",
+        "2. Create new customer",
+        "3. Create loan application",
+        "4. Update application status to SUBMITTED",
+        "5. Login as manager",
+        "6. Approve loan application",
+        "7. View approved application"
+      ]
+    },
+    "errorScenarios": {
+      "description": "Common error cases to test",
+      "scenarios": [
+        {
+          "name": "Invalid credentials",
+          "endpoint": "/api/auth/login",
+          "request": {
+            "usernameOrEmail": "invalid",
+            "password": "wrong"
+          },
+          "expectedStatus": 401
+        },
+        {
+          "name": "Customer not found",
+          "endpoint": "/api/customers/9999",
+          "expectedStatus": 404
+        },
+        {
+          "name": "Invalid loan amount",
+          "endpoint": "/api/loan-applications",
+          "request": {
+            "customerId": 1,
+            "productId": 1,
+            "appliedAmount": 100.00,
+            "loanTermMonths": 12
+          },
+          "expectedStatus": 400
+        }
+      ]
+    }
+  },
+  "environmentVariables": {
+    "baseUrl": "http://localhost:8080",
+    "defaultHeaders": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "authToken": "{{access_token}}",
+    "testCustomerId": 1,
+    "testLoanApplicationId": 1,
+    "testProductId": 1
+  }
+}

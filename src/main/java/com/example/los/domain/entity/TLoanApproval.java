@@ -1,10 +1,15 @@
 package com.example.los.domain.entity;
 
-import jakarta.persistence.*;
+import java.time.Instant;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -23,12 +28,26 @@ public class TLoanApproval {
     private Long approverId;
 
     @Column(name = "decision_code", length = 50)
-    private String decisionCode;
+    private String status;
 
     @Column(name = "remark")
-    private String remark;
+    private String remarks;
 
     @Column(name = "approved_at")
     private Instant approvedAt;
 
+    @Column(name = "approved_by", length = 100)
+    private String approvedBy;
+
+    @Column(name = "approval_level")
+    private Integer approvalLevel;
+
+    @Column(name = "approver_role", length = 50)
+    private String approverRole;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "created_by", length = 100)
+    private String createdBy;
 }

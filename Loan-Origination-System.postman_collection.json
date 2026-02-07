@@ -1,0 +1,1089 @@
+{
+  "info": {
+    "name": "Loan Origination System",
+    "description": "Complete API collection for Loan Origination System with authentication, customer management, loan applications, and product catalog.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "User authentication and token management endpoints",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"officer.john\",\n  \"email\": \"john.officer@bank.com\",\n  \"phone\": \"+85587654321\",\n  \"password\": \"officer123\",\n  \"branchId\": 1,\n  \"roleCode\": \"OFFICER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usernameOrEmail\": \"officer.john\",\n  \"password\": \"officer123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login successful\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has access token\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.accessToken).to.not.be.empty;",
+                  "    pm.expect(jsonData.refreshToken).to.not.be.empty;",
+                  "    ",
+                  "    // Store tokens in environment variables",
+                  "    pm.environment.set(\"access_token\", jsonData.accessToken);",
+                  "    pm.environment.set(\"refresh_token\", jsonData.refreshToken);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "description": "Customer management endpoints",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nameEn\": \"John Doe\",\n  \"nameKh\": \"ចន ដូ\",\n  \"phone\": \"+85512345678\",\n  \"addressId\": 1,\n  \"email\": \"john.doe@example.com\",\n  \"idNumber\": \"123456789\",\n  \"idType\": \"PASSPORT\",\n  \"dateOfBirth\": \"1990-05-15\",\n  \"gender\": \"MALE\",\n  \"occupation\": \"Software Engineer\",\n  \"monthlyIncome\": 2500.00,\n  \"maritalStatus\": \"MARRIED\",\n  \"nationality\": \"Cambodian\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Customer created successfully\", function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has customer ID\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.be.a('number');",
+                  "    ",
+                  "    // Store customer ID for later use",
+                  "    pm.environment.set(\"customer_id\", jsonData.id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customer_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Customers by Name",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/search?name=John",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "John"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer by Phone",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/phone/+85512345678",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "phone", "+85512345678"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nameEn\": \"John Doe Updated\",\n  \"nameKh\": \"ចន ដូ\",\n  \"phone\": \"+85512345678\",\n  \"addressId\": 1,\n  \"email\": \"john.doe.updated@example.com\",\n  \"idNumber\": \"123456789\",\n  \"idType\": \"PASSPORT\",\n  \"dateOfBirth\": \"1990-05-15\",\n  \"gender\": \"MALE\",\n  \"occupation\": \"Senior Software Engineer\",\n  \"monthlyIncome\": 3500.00,\n  \"maritalStatus\": \"MARRIED\",\n  \"nationality\": \"Cambodian\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customer_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customer_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Count Customers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "count"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer Credit Score",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customer_id}}/credit-score",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customer_id}}", "credit-score"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Customer Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Loan Applications",
+      "description": "Loan application management endpoints",
+      "item": [
+        {
+          "name": "Create Loan Application",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": {{customer_id}},\n  \"productId\": 1,\n  \"branchId\": 1,\n  \"appliedAmount\": 10000.00,\n  \"loanTermMonths\": 24,\n  \"purpose\": \"Home Renovation\",\n  \"collateralDescription\": \"Land title deed No. 12345\",\n  \"collateralValue\": 20000.00,\n  \"remarks\": \"Urgent home renovation needed\",\n  \"repaymentFrequency\": \"MONTHLY\",\n  \"currencyCode\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Loan application created\", function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has application ID\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.be.a('number');",
+                  "    ",
+                  "    // Store application ID for later use",
+                  "    pm.environment.set(\"loan_application_id\", jsonData.id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Get Loan Application by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/{{loan_application_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "{{loan_application_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Loan Applications by Customer",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/customer/{{customer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "customer", "{{customer_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Loan Applications by Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/status/DRAFT",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "status", "DRAFT"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Loan Application Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/{{loan_application_id}}/status?statusCode=SUBMITTED&remarks=Submitted%20for%20review",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "{{loan_application_id}}", "status"],
+              "query": [
+                {
+                  "key": "statusCode",
+                  "value": "SUBMITTED"
+                },
+                {
+                  "key": "remarks",
+                  "value": "Submitted for review"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Loan Application",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/{{loan_application_id}}/approve?approvedAmount=9500.00&approvedBy=manager.jane",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "{{loan_application_id}}", "approve"],
+              "query": [
+                {
+                  "key": "approvedAmount",
+                  "value": "9500.00"
+                },
+                {
+                  "key": "approvedBy",
+                  "value": "manager.jane"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Loan Application",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/{{loan_application_id}}/reject?rejectionReason=Insufficient%20income&rejectedBy=manager.jane",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "{{loan_application_id}}", "reject"],
+              "query": [
+                {
+                  "key": "rejectionReason",
+                  "value": "Insufficient income"
+                },
+                {
+                  "key": "rejectedBy",
+                  "value": "manager.jane"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Loan Application",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/{{loan_application_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "{{loan_application_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Total Approved Amount by Branch",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/branch/1/total-approved",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "branch", "1", "total-approved"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Count Applications by Status Since Date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/status/APPROVED/count-since?sinceDate=2024-01-01T00:00:00Z",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "status", "APPROVED", "count-since"],
+              "query": [
+                {
+                  "key": "sinceDate",
+                  "value": "2024-01-01T00:00:00Z"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Loan Application Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/loan-applications/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "loan-applications", "health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "Product catalog endpoints",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "active"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by Code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/code/PL-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "code", "PL-001"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by Type",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/type/PERSONAL_LOAN",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "type", "PERSONAL_LOAN"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/search?search=loan",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "search"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "loan"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products for Amount",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/for-amount?amount=15000.00",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "for-amount"],
+              "query": [
+                {
+                  "key": "amount",
+                  "value": "15000.00"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Count Active Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/count/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "count", "active"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Product Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Test Scenarios",
+      "description": "Complete test scenarios for end-to-end testing",
+      "item": [
+        {
+          "name": "Complete Loan Application Flow",
+          "item": [
+            {
+              "name": "1. Login as Officer",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"usernameOrEmail\": \"officer.john\",\n  \"password\": \"officer123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "login"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "2. Create New Customer",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nameEn\": \"Test Customer\",\n  \"nameKh\": \"អ្នកភ្ញៀវសាកល្បង\",\n  \"phone\": \"+85599988877\",\n  \"addressId\": 1,\n  \"email\": \"test.customer@example.com\",\n  \"idNumber\": \"TEST123456\",\n  \"idType\": \"NATIONAL_ID\",\n  \"dateOfBirth\": \"1985-10-10\",\n  \"gender\": \"MALE\",\n  \"occupation\": \"Tester\",\n  \"monthlyIncome\": 2000.00,\n  \"maritalStatus\": \"SINGLE\",\n  \"nationality\": \"Cambodian\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/customers",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "customers"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "3. Create Loan Application",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": {{customer_id}},\n  \"productId\": 1,\n  \"branchId\": 1,\n  \"appliedAmount\": 3000.00,\n  \"loanTermMonths\": 12,\n  \"purpose\": \"Test Purpose\",\n  \"collateralDescription\": \"Test collateral\",\n  \"collateralValue\": 6000.00,\n  \"remarks\": \"Test application\",\n  \"repaymentFrequency\": \"MONTHLY\",\n  \"currencyCode\": \"USD\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/loan-applications",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "loan-applications"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "4. Submit Application for Review",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/loan-applications/{{loan_application_id}}/status?statusCode=SUBMITTED&remarks=Ready%20for%20review",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "loan-applications", "{{loan_application_id}}", "status"],
+                  "query": [
+                    {
+                      "key": "statusCode",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "remarks",
+                      "value": "Ready for review"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Error Scenario Tests",
+          "item": [
+            {
+              "name": "Invalid Login Credentials",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"usernameOrEmail\": \"invalid\",\n  \"password\": \"wrong\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "auth", "login"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Invalid credentials returns 401\", function() {",
+                      "    pm.response.to.have.status(401);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "Access Without Token",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/customers",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "customers"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Unauthorized access returns 401\", function() {",
+                      "    pm.response.to.have.status(401);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "Non-existent Resource",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/customers/999999",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "customers", "999999"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Non-existent resource returns 404\", function() {",
+                      "    pm.response.to.have.status(404);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script to ensure environment variables are set",
+          "if (!pm.environment.get(\"baseUrl\")) {",
+          "    pm.environment.set(\"baseUrl\", \"http://localhost:8080\");",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script - runs after each request",
+          "pm.test(\"Response time is acceptable\", function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+          "});",
+          "",
+          "pm.test(\"Response has valid JSON\", function () {",
+          "    pm.response.to.have.jsonBody();",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "customer_id",
+      "value": "1"
+    },
+    {
+      "key": "loan_application_id",
+      "value": "1"
+    }
+  ],
+  "auth": null
+}
