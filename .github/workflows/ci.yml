@@ -43,6 +43,21 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Check for Docker Hub credentials
+        run: |
+          if [ -z "${{ secrets.DOCKER_HUB_USERNAME }}" ]; then
+            echo "ERROR: DOCKER_HUB_USERNAME secret is not set"
+            echo "Please add it in GitHub repository settings -> Secrets and variables -> Actions"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DOCKER_HUB_TOKEN }}" ]; then
+            echo "ERROR: DOCKER_HUB_TOKEN secret is not set"
+            echo "Please generate a Docker Hub access token and add it as a secret"
+            echo "Visit: https://hub.docker.com/settings/security"
+            exit 1
+          fi
+          echo "Docker Hub credentials are configured"
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -51,9 +66,14 @@ jobs:
 
       - name: Build and push Docker image with Jib
         run: |
+          # Debug: Check if credentials are available (masked for security)
+          echo "Docker Hub Username: ${{ secrets.DOCKER_HUB_USERNAME }}"
+          echo "Docker Hub Token is set: ${#DOCKER_HUB_TOKEN} characters"
+          
           mvn compile jib:build \
             -Ddocker.image.prefix=${{ secrets.DOCKER_HUB_USERNAME }} \
             -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }} \
             -Djib.to.auth.password=${{ secrets.DOCKER_HUB_TOKEN }}
         env:
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_TOKEN }}
